@@ -7,5 +7,6 @@
     "50",
     "51"
   ],
+  "session-modes": ["user", "unlock-dialog"],
   "url": "https://github.com/sunwxg/gnome-shell-extension-unblank"
 }

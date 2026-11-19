@@ -49,8 +49,9 @@ export class OledShift {
         return !!dialog && dialog._activePage === dialog._promptBox;
     }
 
-    start() {
+    start({appearance = true} = {}) {
         this.stop();
+        this._appearance = appearance;
 
         const target = this._lookupTarget();
         if (target)
@@ -101,12 +102,12 @@ export class OledShift {
         target.connectObject('destroy', () => {
             this._target = null;
         }, this);
-        if (this._hasBlackKey) {
+        if (this._appearance && this._hasBlackKey) {
             this._settings.connectObject('changed::oled-black-background',
                 () => this._syncBlackBackground(), this);
             this._syncBlackBackground();
         }
-        if (!this._hasOpacityKey)
+        if (!this._appearance || !this._hasOpacityKey)
             return;
         const pct = this._settings.get_int('oled-content-opacity');
         target.opacity = Math.round(255 * pct / 100);

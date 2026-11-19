@@ -1,5 +1,30 @@
 <schemalist gettext-domain="gnome-shell-extensions">
   <schema id="org.gnome.shell.extensions.unblank" path="/org/gnome/shell/extensions/unblank/">
+    <key name="aod-mode" type="b">
+      <default>false</default>
+      <summary>Interactive always-on display</summary>
+      <description>Dim the clock on black; restore the wallpaper on input and return after inactivity. Re-enable the extension after changing this option. In this mode, the brightness setting controls dimming and the clock always uses a black background.</description>
+    </key>
+    <key name="aod-brightness" type="i">
+      <default>40</default><range min="5" max="100"/>
+      <summary>Brightness while the clock is idle (percent)</summary>
+    </key>
+    <key name="aod-software-dimming" type="b">
+      <default>true</default>
+      <summary>Dim the image instead of the display brightness</summary>
+    </key>
+    <key name="aod-idle-delay" type="i">
+      <default>10</default><range min="1" max="120"/>
+      <summary>Seconds of inactivity before returning to the dim clock</summary>
+    </key>
+    <key name="aod-fade-in" type="i">
+      <default>1500</default><range min="0" max="5000"/>
+      <summary>Duration of entering the dim clock (milliseconds)</summary>
+    </key>
+    <key name="aod-fade-out" type="i">
+      <default>300</default><range min="0" max="2000"/>
+      <summary>Duration of restoring the wallpaper (milliseconds)</summary>
+    </key>
     <key name="switch" type="b">
       <default>true</default>
       <summary>Key to switch unblank</summary>

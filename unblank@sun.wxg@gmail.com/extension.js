@@ -14,6 +14,7 @@ import * as Overview from 'resource:///org/gnome/shell/ui/overview.js';
 import { loadInterfaceXML } from 'resource:///org/gnome/shell/misc/fileUtils.js';
 
 import {OledShift} from './oledShift.js';
+import {AodMode} from './aodMode.js';
 
 
 const MANUAL_FADE_TIME = 0.3;
@@ -271,6 +272,12 @@ export default class PanelScrollExtension extends Extension {
     enable() {
         this._settings = this.getSettings();
 
+        if (this._settings.get_boolean('aod-mode')) {
+            this._aodController = new AodMode(this._settings);
+            this._aodController.enable();
+            return;
+        }
+
         if (enabled)
             return;
         unblank = new Unblank(this._settings);
@@ -280,6 +287,12 @@ export default class PanelScrollExtension extends Extension {
     }
 
     disable() {
+        if (this._aodController) {
+            this._aodController.disable();
+            this._aodController = null;
+            this._settings = null;
+            return;
+        }
         if (!Main.sessionMode.isLocked) {
             unblank.disable();
             unblank = null

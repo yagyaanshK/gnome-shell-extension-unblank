@@ -30,6 +30,29 @@ export default class UnblankPrefs extends ExtensionPreferences {
         const group = new Adw.PreferencesGroup();
         page.add(group);
 
+        const interactive = new Adw.PreferencesGroup({title: 'Interactive always-on display'});
+        page.add(interactive);
+        const modeRow = new Adw.SwitchRow({
+            title: 'Restore wallpaper and brightness on input',
+            subtitle: 'Re-enable Unblank after changing this mode. Uses a black background; the brightness below replaces content opacity.',
+        });
+        settings.bind('aod-mode', modeRow, 'active', Gio.SettingsBindFlags.DEFAULT);
+        interactive.add(modeRow);
+        const software = new Adw.SwitchRow({title: 'Software dimming', subtitle: 'Darkens the image; on OLED this also reduces emitted light.'});
+        settings.bind('aod-software-dimming', software, 'active', Gio.SettingsBindFlags.DEFAULT);
+        interactive.add(software);
+        for (const [key, title, lower, upper, step] of [
+            ['aod-brightness', 'Idle clock brightness (%)', 5, 100, 5],
+            ['aod-idle-delay', 'Return after inactivity (seconds)', 1, 120, 1],
+            ['aod-fade-in', 'Fade into dim clock (ms)', 0, 5000, 100],
+            ['aod-fade-out', 'Restore wallpaper fade (ms)', 0, 2000, 50],
+        ]) {
+            const row = new Adw.SpinRow({title,
+                adjustment: new Gtk.Adjustment({lower, upper, step_increment: step, page_increment: step * 5})});
+            settings.bind(key, row, 'value', Gio.SettingsBindFlags.DEFAULT);
+            interactive.add(row);
+        }
+
         const powerRow = new Adw.SwitchRow({ title: 'Only unblank when on AC' });
         settings.bind('power', powerRow, 'active', Gio.SettingsBindFlags.DEFAULT);
         group.add(powerRow);
